@@ -11,7 +11,7 @@
 
         <main class="flex flex-1 flex-col pt-20 pb-16 space-y-8">
             <section class="mx-auto w-full max-w-6xl px-6 space-y-6">
-                <div class="relative overflow-hidden rounded-3xl border border-white/60 bg-slate-50/90 text-slate-900 shadow-[0_12px_45px_-18px_rgba(15,23,42,0.6)] transition">
+                <div class="relative -mt-8 md:-mt-10 overflow-hidden rounded-3xl border border-white/60 bg-slate-50/90 text-slate-900 shadow-[0_12px_45px_-18px_rgba(15,23,42,0.6)] transition">
                     <div class="bg-red-600/90 border-b border-red-500/40 px-6 py-4 text-center text-xs uppercase tracking-[0.4em] font-semibold text-white">
                         Panel administrativo
                     </div>

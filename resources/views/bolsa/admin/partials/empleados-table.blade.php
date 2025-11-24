@@ -15,14 +15,14 @@
             ];
         @endphp
         <article class="flex h-full min-h-[16rem] flex-col justify-between rounded-3xl border border-slate-500 bg-white/90 px-6 py-6 shadow-lg shadow-black/10 text-slate-900">
-            <div class="grid gap-4 md:grid-cols-[2fr_1fr_1fr]">
-                <div class="space-y-1">
-                    <p class="text-lg font-semibold text-slate-900">{{ $empleado->nombre_completo }}</p>
-                    <p class="text-sm text-slate-600">{{ $empleado->correo }}</p>
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
+                <div class="space-y-1 min-w-0">
+                    <p class="text-lg font-semibold text-slate-900 break-words">{{ $empleado->nombre_completo }}</p>
+                    <p class="text-sm text-slate-600 break-words">{{ $empleado->correo }}</p>
                     <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Edad {{ $empleado->edad }}</p>
                 </div>
 
-                <div class="space-y-2">
+                <div class="space-y-2 min-w-0">
                     <p class="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-slate-500">Subareas</p>
                     <ul class="list-disc space-y-1 pl-5 text-sm text-slate-700">
                         @php
@@ -38,14 +38,14 @@
                     </ul>
                 </div>
 
-            <div class="space-y-2">
-                <p class="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-slate-500">Experiencia</p>
-                <p class="text-sm text-slate-700">{{ $empleado->experiencia }}</p>
-                <p class="text-sm text-slate-500">Dispuesto a viajar: <span class="font-semibold text-slate-900">{{ ucfirst($empleado->dispuesto) }}</span></p>
+                <div class="space-y-2 min-w-0">
+                    <p class="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-slate-500">Experiencia</p>
+                    <p class="text-sm text-slate-700">{{ $empleado->experiencia }}</p>
+                    <p class="text-sm text-slate-500">Dispuesto a viajar: <span class="font-semibold text-slate-900">{{ ucfirst($empleado->dispuesto) }}</span></p>
+                </div>
             </div>
-            </div>
-            <div class="mt-5 flex flex-col gap-3">
-                <div class="text-[0.65rem] text-slate-500">
+            <div class="mt-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div class="text-[0.65rem] text-slate-500 min-w-0">
                     <p>Areas relacionadas: {{ $areaNotes->count() ? $areaNotes->join(', ') : 'No disponible' }}</p>
                     <p>Registrado el {{ optional($empleado->fecha_registro)->format('d/m/Y') }}</p>
                 </div>

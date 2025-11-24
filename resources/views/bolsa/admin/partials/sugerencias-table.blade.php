@@ -1,4 +1,4 @@
-<div class="space-y-4">
+﻿<div class="space-y-4">
     @forelse ($empleados as $empleado)
         @php
             $subareasList = collect([$empleado->primaryArea, $empleado->secondaryArea, $empleado->tertiaryArea])->filter();
@@ -12,10 +12,10 @@
             ];
         @endphp
         <article class="flex flex-col gap-4 rounded-3xl border border-slate-500 bg-white px-6 py-5 shadow-[0_20px_70px_-25px_rgba(15,23,42,0.6)] md:flex-row md:items-center md:justify-between">
-            <div class="space-y-3">
+            <div class="space-y-3 min-w-0">
                 <div class="space-y-1">
                     <p class="text-lg font-semibold text-slate-900">{{ $empleado->nombre_completo }}</p>
-                    <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Subáreas</p>
+                    <p class="text-xs uppercase tracking-[0.3em] text-slate-500">SubÃ¡reas</p>
                 </div>
                 @if ($subareaLabels->isNotEmpty())
                     <ul class="flex flex-wrap gap-2">
@@ -26,14 +26,14 @@
                         @endforeach
                     </ul>
                 @else
-                    <p class="text-xs text-slate-500 italic">Sin subáreas asignadas</p>
+                    <p class="text-xs text-slate-500 italic">Sin subÃ¡reas asignadas</p>
                 @endif
                 <p class="text-sm text-slate-600">
                     <span class="text-[0.65rem] uppercase tracking-[0.3em] text-slate-500">Sugerencia:</span>
                     {{ $suggestionLabel }}
                 </p>
             </div>
-            <div class="flex flex-wrap items-center gap-3">
+            <div class="flex flex-wrap items-center gap-3 min-w-0">
                 @if ($empleado->ruta_curriculum)
                     <a
                         href="{{ route('bolsa.curriculum.preview', $empleado) }}"
@@ -51,7 +51,7 @@
                     </a>
                 @else
                     <span class="rounded-full border border-slate-300 px-3 py-2 text-[0.6rem] font-semibold tracking-[0.3em] text-slate-500">
-                        Sin currículum
+                        Sin currÃ­culum
                     </span>
                 @endif
                 <button
