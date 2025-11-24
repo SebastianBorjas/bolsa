@@ -1,5 +1,12 @@
 <header class="fixed top-0 left-0 z-50 w-full border-b border-blue-900/60 bg-blue-950/90 backdrop-blur-sm">
     <div class="relative mx-auto flex max-w-6xl items-center px-6 py-4">
+        <div class="absolute left-6 top-1 flex items-center gap-3 md:hidden">
+            <img
+                src="{{ asset('images/logos/Logo-Bco.png') }}"
+                alt="Logo Bolsa"
+                class="h-12 w-auto object-contain"
+            />
+        </div>
         <div class="absolute left-6 top-1 hidden items-center gap-3 md:flex">
             <img
                 src="{{ asset('images/logos/Logo-Bco.png') }}"
@@ -7,10 +14,12 @@
                 class="h-12 w-auto object-contain"
             />
         </div>
-        <div class="flex w-full items-center justify-center gap-3">
+        <div class="flex w-full items-center justify-end md:justify-center gap-3 pr-0">
             <div class="text-center">
-                <h1 class="text-xl md:text-2xl font-bold uppercase tracking-[0.35em] text-white">
-                    Bolsa de trabajo
+                <h1 class="text-sm md:text-2xl font-bold uppercase tracking-[0.35em] text-white leading-tight">
+                    <span class="block md:hidden">Bolsa</span>
+                    <span class="block md:hidden">de trabajo</span>
+                    <span class="hidden md:block">Bolsa de trabajo</span>
                 </h1>
             </div>
         </div>
