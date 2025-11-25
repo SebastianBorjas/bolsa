@@ -20,7 +20,28 @@ class RegistroController extends Controller
     public function store(Request $request)
     {
         $messages = [
+            'required' => 'El campo :attribute es obligatorio.',
+            'email.email' => 'Ingresa un correo electrónico válido.',
             'email.unique' => 'El correo ya existe en nuestros registros.',
+            'curriculum.mimes' => 'El currículum debe ser un archivo PDF.',
+            'curriculum.max' => 'El currículum no puede superar los 2 MB.',
+            'subareas.max' => 'Solo puedes elegir hasta 3 subáreas.',
+            'subareas.*.exists' => 'Selecciona subáreas válidas.',
+        ];
+
+        $attributeNames = [
+            'nombre' => 'nombre',
+            'paterno' => 'apellido paterno',
+            'materno' => 'apellido materno',
+            'email' => 'correo electrónico',
+            'telefono' => 'teléfono',
+            'edad' => 'edad',
+            'estudios' => 'nivel de estudios',
+            'experiencia' => 'experiencia',
+            'dispuesto' => 'disposición a viajar',
+            'curriculum' => 'currículum',
+            'subareas' => 'subáreas',
+            'sugerencia' => 'sugerencia',
         ];
 
         $data = $request->validate([
@@ -37,7 +58,7 @@ class RegistroController extends Controller
             'subareas' => ['nullable', 'array', 'max:3'],
             'subareas.*' => ['integer', 'exists:subareas,id_subarea'],
             'sugerencia' => ['nullable', 'string', 'max:255'],
-        ]);
+        ], $messages, $attributeNames);
 
         $ruta = $this->storeCurriculum($request->file('curriculum'), $data['nombre'], $data['paterno']);
 

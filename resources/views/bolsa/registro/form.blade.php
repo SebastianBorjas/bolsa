@@ -34,8 +34,12 @@
                     @endif
 
                     @if ($errors->any())
-                        <div class="rounded-2xl border border-red-500/70 bg-red-500/10 px-5 py-3 text-sm text-red-100">
-                            <ul class="list-disc space-y-1 pl-5">
+                        <div
+                            class="rounded-2xl border border-red-700 bg-gradient-to-br from-red-700 via-red-600 to-red-500 px-5 py-3 text-sm text-white shadow-lg"
+                            role="alert"
+                            aria-live="assertive"
+                        >
+                            <ul class="list-disc space-y-1 pl-5 text-white">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
