@@ -101,10 +101,10 @@
                     <div class="space-y-6 px-8 py-10">
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Registros</p>
-                            <p class="text-xs text-slate-500">{{ $empleados->count() }} registros</p>
+                            <p class="text-xs text-slate-500">{{ $empleados->total() }} registros</p>
                         </div>
                         <div id="empleados-wrapper" data-fetch-url="{{ route('bolsa.empleados') }}">
-                            @include('bolsa.admin.partials.empleados-table')
+                            @include('bolsa.admin.partials.empleados-content')
                         </div>
                     </div>
                 </div>
@@ -322,6 +322,15 @@
                 const searchInput = form.querySelector('input[name="search"]');
                 const wrapper = document.getElementById('empleados-wrapper');
                 const fetchUrl = wrapper.dataset.fetchUrl;
+                let currentPage = 1;
+
+                const updateCurrentPageFromDOM = () => {
+                    const list = wrapper.querySelector('#empleados-list');
+                    const pageValue = list && list.dataset ? list.dataset.currentPage : null;
+                    currentPage = Number(pageValue) || 1;
+                };
+
+                updateCurrentPageFromDOM();
 
                 const toggleSubarea = () => {
                     if (!areaSelect.value) {
@@ -336,7 +345,7 @@
                     }
                 };
 
-                const fetchData = async () => {
+                const fetchData = async (page = currentPage) => {
                     const params = new URLSearchParams({
                         area: areaSelect.value,
                         subarea: subareaSelect.value,
@@ -344,32 +353,54 @@
                         order: orderSelect.value,
                     });
 
+                    if (page > 1) {
+                        params.set('page', String(page));
+                    } else {
+                        params.delete('page');
+                    }
+
                     const response = await fetch(`${fetchUrl}?${params.toString()}`, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
                         },
                     });
                     const data = await response.json();
-                    wrapper.innerHTML = data.table;
+                    wrapper.innerHTML = data.content;
                     subareaSelect.innerHTML = data.subareas;
                     toggleSubarea();
+                    updateCurrentPageFromDOM();
                 };
+
+                const handlePaginationClick = (event) => {
+                    const button = event.target.closest('[data-pagination-link]');
+                    if (!button) {
+                        return;
+                    }
+                    event.preventDefault();
+                    const targetPage = Number(button.dataset.page);
+                    if (Number.isNaN(targetPage) || targetPage === currentPage) {
+                        return;
+                    }
+                    fetchData(targetPage);
+                };
+
+                wrapper.addEventListener('click', handlePaginationClick);
 
                 areaSelect.addEventListener('change', () => {
                     subareaSelect.value = '';
-                    fetchData();
+                    fetchData(1);
                 });
-                subareaSelect.addEventListener('change', fetchData);
-                orderSelect.addEventListener('change', fetchData);
+                subareaSelect.addEventListener('change', () => fetchData(1));
+                orderSelect.addEventListener('change', () => fetchData(1));
                 form.addEventListener('submit', (event) => {
                     event.preventDefault();
-                    fetchData();
+                    fetchData(1);
                 });
 
                 let debounce;
                 searchInput.addEventListener('input', () => {
                     clearTimeout(debounce);
-                    debounce = setTimeout(fetchData, 400);
+                    debounce = setTimeout(() => fetchData(1), 400);
                 });
 
                 toggleSubarea();

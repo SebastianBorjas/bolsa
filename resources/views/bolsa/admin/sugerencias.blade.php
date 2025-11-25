@@ -238,7 +238,7 @@
                         },
                     });
                     const data = await response.json();
-                    wrapper.innerHTML = data.table;
+                    wrapper.innerHTML = data.content;
                     subareaSelect.innerHTML = data.subareas;
                     toggleSubarea();
                 };

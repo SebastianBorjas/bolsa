@@ -30,13 +30,12 @@ class BolsaController extends Controller
         $assigned = $request->query('assigned', '1') !== '0';
         $data = $this->buildDashboardData($request, $assigned);
 
+        $tablePartial = $assigned
+            ? 'bolsa.admin.partials.empleados-content'
+            : 'bolsa.admin.partials.sugerencias-table';
+
         return response()->json([
-            'table' => view(
-                $assigned
-                    ? 'bolsa.admin.partials.empleados-table'
-                    : 'bolsa.admin.partials.sugerencias-table',
-                $data
-            )->render(),
+            'content' => view($tablePartial, $data)->render(),
             'subareas' => view('bolsa.admin.partials.subarea-options', $data)->render(),
         ]);
     }
@@ -94,7 +93,11 @@ class BolsaController extends Controller
             $empleadosQuery->orderByDesc('fecha_registro');
         }
 
-        $empleados = $empleadosQuery->get();
+        if ($assigned) {
+            $empleados = $empleadosQuery->paginate(30);
+        } else {
+            $empleados = $empleadosQuery->get();
+        }
 
         return compact(
             'areas',
