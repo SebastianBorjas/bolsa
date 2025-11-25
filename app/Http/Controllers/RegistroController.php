@@ -19,11 +19,15 @@ class RegistroController extends Controller
 
     public function store(Request $request)
     {
+        $messages = [
+            'email.unique' => 'El correo ya existe en nuestros registros.',
+        ];
+
         $data = $request->validate([
             'nombre' => ['required', 'string', 'max:60'],
             'paterno' => ['required', 'string', 'max:60'],
             'materno' => ['nullable', 'string', 'max:60'],
-            'email' => ['required', 'email', 'max:100'],
+            'email' => ['required', 'email', 'max:100', 'unique:empleados,correo'],
             'telefono' => ['required', 'string', 'max:20'],
             'edad' => ['required', 'integer', 'between:18,99'],
             'estudios' => ['required', 'in:primaria,secundaria,preparatoria,universidad,maestria,doctorado'],
