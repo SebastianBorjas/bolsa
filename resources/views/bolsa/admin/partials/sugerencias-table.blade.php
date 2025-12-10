@@ -1,4 +1,4 @@
-﻿<div class="space-y-4">
+<div class="space-y-4">
     @forelse ($empleados as $empleado)
         @php
             $subareasList = collect([$empleado->primaryArea, $empleado->secondaryArea, $empleado->tertiaryArea])->filter();
@@ -15,7 +15,7 @@
             <div class="space-y-3 min-w-0">
                 <div class="space-y-1">
                     <p class="text-lg font-semibold text-slate-900">{{ $empleado->nombre_completo }}</p>
-                    <p class="text-xs uppercase tracking-[0.3em] text-slate-500">SubÃ¡reas</p>
+                    <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Subáreas</p>
                 </div>
                 @if ($subareaLabels->isNotEmpty())
                     <ul class="flex flex-wrap gap-2">
@@ -26,7 +26,7 @@
                         @endforeach
                     </ul>
                 @else
-                    <p class="text-xs text-slate-500 italic">Sin subÃ¡reas asignadas</p>
+                    <p class="text-xs text-slate-500 italic">Sin subáreas asignadas</p>
                 @endif
                 <p class="text-sm text-slate-600">
                     <span class="text-[0.65rem] uppercase tracking-[0.3em] text-slate-500">Sugerencia:</span>
@@ -51,7 +51,7 @@
                     </a>
                 @else
                     <span class="rounded-full border border-slate-300 px-3 py-2 text-[0.6rem] font-semibold tracking-[0.3em] text-slate-500">
-                        Sin currÃ­culum
+                        Sin currículum
                     </span>
                 @endif
                 <button

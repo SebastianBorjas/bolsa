@@ -17,6 +17,8 @@ Route::get('/bolsa/admin/curriculum/{empleado}/preview', [BolsaController::class
 Route::get('/bolsa/admin/curriculum/{empleado}/download', [BolsaController::class, 'downloadCurriculum'])->name('bolsa.curriculum.download');
 Route::put('/bolsa/admin/empleados/{empleado}', [BolsaController::class, 'updateEmpleado'])->name('bolsa.empleados.update');
 Route::delete('/bolsa/admin/empleados/{empleado}', [BolsaController::class, 'destroyEmpleado'])->name('bolsa.empleados.destroy');
+Route::post('/bolsa/admin/empleados/{empleado}/enviar', [BolsaController::class, 'sendCv'])->name('bolsa.empleados.send');
+Route::post('/bolsa/admin/empleados/enviar-multiple', [BolsaController::class, 'sendMultiple'])->name('bolsa.empleados.sendMultiple');
 Route::get('/bolsa/admin/areas', [BolsaController::class, 'areas'])->name('bolsa.areas');
 Route::post('/bolsa/admin/areas', [BolsaController::class, 'storeArea'])->name('bolsa.areas.store');
 Route::put('/bolsa/admin/areas/{area}', [BolsaController::class, 'updateArea'])->name('bolsa.areas.update');

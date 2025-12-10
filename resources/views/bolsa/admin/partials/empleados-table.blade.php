@@ -13,8 +13,13 @@
                 'sugerencia' => $empleado->sugerencia ?? '',
                 'subareas' => collect([$empleado->area1, $empleado->area2, $empleado->area3])->filter()->values()->all(),
             ];
+            $sendData = [
+                'id' => $empleado->id_empleado,
+                'nombre' => $empleado->nombre_completo,
+                'correo' => $empleado->correo,
+            ];
         @endphp
-        <article class="flex h-full min-h-[16rem] flex-col justify-between rounded-3xl border border-slate-500 bg-white/90 px-6 py-6 shadow-lg shadow-black/10 text-slate-900">
+        <article class="flex h-full min-h-[16rem] flex-col justify-between rounded-3xl border border-slate-500 bg-white/90 px-6 py-6 shadow-lg shadow-black/10 text-slate-900" data-employee-card data-employee-id="{{ $empleado->id_empleado }}">
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
                 <div class="space-y-1 min-w-0">
                     <p class="text-lg font-semibold text-slate-900 break-words">{{ $empleado->nombre_completo }}</p>
@@ -50,6 +55,16 @@
                     <p>Registrado el {{ optional($empleado->fecha_registro)->format('d/m/Y') }}</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
+                    <label data-bulk-toggle class="hidden flex items-center gap-2 rounded-full border border-slate-500 bg-white px-3 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-900">
+                        <input
+                            type="checkbox"
+                            class="h-4 w-4 rounded border-slate-400 text-blue-600 focus:ring-blue-500"
+                            data-bulk-checkbox
+                            value="{{ $empleado->id_empleado }}"
+                            aria-label="Seleccionar {{ $empleado->nombre_completo }}"
+                        />
+                        Seleccionar
+                    </label>
                     @if ($empleado->ruta_curriculum)
                         <a
                             href="{{ route('bolsa.curriculum.preview', $empleado) }}"
@@ -65,6 +80,14 @@
                         >
                             Descargar
                         </a>
+                        <button
+                            type="button"
+                            data-send-email-button
+                            data-send-payload='@json($sendData, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE)'
+                            class="rounded-full border border-blue-500 bg-blue-50 px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-blue-800 transition hover:border-blue-600 hover:bg-blue-100 focus-visible:outline-none focus-visible:ring focus-visible:ring-blue-200"
+                        >
+                            Enviar
+                        </button>
                     @else
                         <span class="rounded-full border border-slate-500 px-3 py-2 text-[0.6rem] font-semibold tracking-[0.3em] text-slate-500">
                             Sin curriculum

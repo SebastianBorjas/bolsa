@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmpleadoCvMail;
+use App\Mail\EmpleadosBulkCvMail;
 use App\Models\Area;
 use App\Models\Empleado;
 use App\Models\Subarea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -207,6 +210,92 @@ class BolsaController extends Controller
         ]);
 
         return redirect()->route('bolsa.sugerencias')->with('status', 'Registro reasignado correctamente.');
+    }
+
+    public function sendCv(Request $request, Empleado $empleado)
+    {
+        if (! Auth::check()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'destinatario' => ['required', 'email'],
+            'asunto' => ['required', 'string', 'max:150'],
+            'mensaje' => ['required', 'string', 'max:2000'],
+        ]);
+
+        $relativePath = $empleado->ruta_curriculum ? "curriculums/{$empleado->ruta_curriculum}" : null;
+        $disk = Storage::disk('local');
+
+        if (! $relativePath || ! $disk->exists($relativePath)) {
+            return response()->json([
+                'message' => 'Este registro no tiene curriculum adjunto.',
+            ], 422);
+        }
+
+        $attachmentPath = $disk->path($relativePath);
+
+        Mail::to($validated['destinatario'])->send(new EmpleadoCvMail(
+            $empleado,
+            $validated['asunto'],
+            $validated['mensaje'],
+            $attachmentPath
+        ));
+
+        return response()->json([
+            'message' => 'Correo enviado correctamente.',
+        ]);
+    }
+
+    public function sendMultiple(Request $request)
+    {
+        if (! Auth::check()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'destinatario' => ['required', 'email'],
+            'asunto' => ['required', 'string', 'max:150'],
+            'mensaje' => ['required', 'string', 'max:2000'],
+            'empleados' => ['required', 'array', 'min:1', 'max:100'],
+            'empleados.*' => ['integer', 'exists:empleados,id_empleado'],
+        ]);
+
+        $empleados = Empleado::whereIn('id_empleado', $validated['empleados'])
+            ->whereNotNull('ruta_curriculum')
+            ->get();
+
+        if ($empleados->isEmpty()) {
+            return response()->json([
+                'message' => 'Ninguno de los registros seleccionados tiene curriculum adjunto.',
+            ], 422);
+        }
+
+        $disk = Storage::disk('local');
+        $attachments = [];
+        foreach ($empleados as $empleado) {
+            $relativePath = "curriculums/{$empleado->ruta_curriculum}";
+            if ($disk->exists($relativePath)) {
+                $attachments[] = $disk->path($relativePath);
+            }
+        }
+
+        if (empty($attachments)) {
+            return response()->json([
+                'message' => 'No se encontraron archivos PDF para los registros seleccionados.',
+            ], 422);
+        }
+
+        Mail::to($validated['destinatario'])->send(new EmpleadosBulkCvMail(
+            $empleados->all(),
+            $validated['asunto'],
+            $validated['mensaje'],
+            $attachments
+        ));
+
+        return response()->json([
+            'message' => 'Correos enviados correctamente.',
+        ]);
     }
 
     public function areas()
